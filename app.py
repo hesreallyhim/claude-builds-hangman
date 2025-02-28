@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Hangman Game - A simple command-line implementation of the classic word guessing game.
 """
