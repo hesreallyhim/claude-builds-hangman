@@ -1,11 +1,12 @@
 """
 Hangman Game - A simple command-line implementation of the classic word guessing game.
 """
+
 import csv
 import random
 import os
 import sys
-from typing import List, Set, Tuple, Optional
+from typing import List, Set, Tuple
 
 
 class HangmanGame:
@@ -82,10 +83,10 @@ class HangmanGame:
  / \\  |
       |
 =========
-        """
+        """,
     ]
 
-    def __init__(self, word_list_path: str = "word-list.csv"):
+    def __init__(self, word_list_path: str = "word-list.csv") -> None:
         """Initialize the game with the word list path."""
         self.word_list_path = word_list_path
         self.word_list: List[Tuple[str, int]] = []
@@ -118,7 +119,8 @@ class HangmanGame:
         min_difficulty = max(1, difficulty - 1)
         max_difficulty = min(10, difficulty + 1)
         filtered_words = [
-            word for word, diff in self.word_list 
+            word
+            for word, diff in self.word_list
             if min_difficulty <= diff <= max_difficulty
         ]
 
@@ -145,18 +147,18 @@ class HangmanGame:
             if guess in self.guessed_letters:
                 print(f"You already guessed '{guess}'. Try a different letter.")
                 return False
-            
+
             self.guessed_letters.add(guess)
-            
+
             if guess not in self.secret_word:
                 self.wrong_guesses.add(guess)
                 self.wrong_attempts += 1
                 print(f"Sorry, '{guess}' is not in the word.")
             else:
                 print(f"Good guess! '{guess}' is in the word.")
-            
+
             return True
-            
+
         # Check if it's a full word guess
         elif len(guess) > 1 and guess.isalpha():
             if guess == self.secret_word:
@@ -168,9 +170,9 @@ class HangmanGame:
             else:
                 self.wrong_attempts += 1
                 print(f"Sorry, '{guess}' is not the correct word.")
-            
+
             return True
-            
+
         else:
             print("Please enter a valid letter or word (letters only).")
             return False
@@ -181,7 +183,7 @@ class HangmanGame:
         if all(letter.lower() in self.guessed_letters for letter in self.secret_word):
             self.game_over = True
             self.won = True
-        
+
         # Check if player lost (too many wrong guesses)
         if self.wrong_attempts >= self.max_attempts:
             self.game_over = True
@@ -190,20 +192,22 @@ class HangmanGame:
     def display_game(self) -> None:
         """Display the current game state."""
         # Clear screen (works on both Windows and Unix-like systems)
-        os.system('cls' if os.name == 'nt' else 'clear')
-        
+        os.system("cls" if os.name == "nt" else "clear")
+
         # Display title
         print("\n===== HANGMAN =====\n")
-        
+
         # Display gallows
         print(self.HANGMAN_STAGES[self.wrong_attempts])
-        
+
         # Display word
         print(f"\nWord: {self.display_word()}")
-        
+
         # Display guessed letters
-        print(f"\nIncorrect guesses: {', '.join(sorted(self.wrong_guesses)) if self.wrong_guesses else 'None'}")
-        
+        print(
+            f"\nIncorrect guesses: {', '.join(sorted(self.wrong_guesses)) if self.wrong_guesses else 'None'}"
+        )
+
         # Display attempts remaining
         print(f"Attempts remaining: {self.max_attempts - self.wrong_attempts}")
 
@@ -217,13 +221,17 @@ class HangmanGame:
         # Welcome message and difficulty selection
         print("\n===== WELCOME TO HANGMAN =====\n")
         print("Try to guess the secret word one letter at a time.")
-        print("You can also guess the entire word, but if you're wrong, you lose an attempt.")
+        print(
+            "You can also guess the entire word, but if you're wrong, you lose an attempt."
+        )
         print("You have 6 incorrect guesses before the hangman is complete.\n")
-        
+
         # Get difficulty level
         while True:
             try:
-                difficulty = int(input("Choose difficulty level (1-10, 1=easiest, 10=hardest): "))
+                difficulty = int(
+                    input("Choose difficulty level (1-10, 1=easiest, 10=hardest): ")
+                )
                 if 1 <= difficulty <= 10:
                     break
                 print("Please enter a number between 1 and 10.")
@@ -233,38 +241,38 @@ class HangmanGame:
                 print("\nUnable to read input. Using default difficulty level of 5.")
                 difficulty = 5
                 break
-        
+
         # Select word based on difficulty
         if not self.select_word(difficulty):
             print("Could not select a word. Exiting.")
             return
-        
+
         # Main game loop
         while not self.game_over:
             self.display_game()
-            
+
             try:
                 guess = input("\nEnter your guess (letter or word): ")
-                
+
                 if not guess:
                     print("Please enter a letter or word.")
                     continue
             except EOFError:
                 print("\nUnable to read input. Exiting game.")
                 break
-                
+
             # Process guess and check game state
             if self.make_guess(guess):
                 self.check_game_state()
-        
+
         # Game over - display final state
         self.display_game()
-        
+
         if self.won:
             print("\nCongratulations! You've guessed the word correctly!")
         else:
             print(f"\nGame over! The word was: {self.secret_word}")
-        
+
         print("\nThanks for playing Hangman!")
 
 
@@ -272,15 +280,15 @@ def main():
     """Entry point for the application."""
     game = HangmanGame()
     game.play()
-    
+
     # Ask if player wants to play again
     while True:
         try:
             play_again = input("\nWould you like to play again? (y/n): ").lower()
-            if play_again in ['y', 'yes']:
+            if play_again in ["y", "yes"]:
                 game = HangmanGame()
                 game.play()
-            elif play_again in ['n', 'no']:
+            elif play_again in ["n", "no"]:
                 print("Thanks for playing Hangman! Goodbye!")
                 break
             else:
