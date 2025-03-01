@@ -1,6 +1,6 @@
-# Hangman Game
+# Claude Builds Hangman
 
-A simple command-line implementation of the classic Hangman word guessing game.
+A simple command-line implementation of the classic "hangman" word-guessing game, built entirely using Anthropic's Claude Code service. I challenged myself/Claude Code to build a functional app in under 30 minutes without manually touching a single file or line of code. These are the results.
 
 ## Running the Game
 
